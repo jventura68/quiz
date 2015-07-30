@@ -1,3 +1,16 @@
+<label for="tema" class="rem">Tema:</label>
+<select name="quiz[tema]">
+<%   var temas = ['Otro', 'Humanidades', 'Ocio', 'Ciencia','Tecnología'];
+     var selected='';
+    for (var i=0;i<temas.length;i++){
+      if (temas[i]===quiz.tema) {
+          selected = 'selected';
+      }
+%>
+      <option <%= selected %> value="<%= temas[i] %>"><%= temas[i] %></option>
+      <% selected ='';
+    } %>
+</select><p>
 <label for="preg" class="rem">Pregunta:</label>
 <input type="text" id="preg" name="quiz[pregunta]" value="<%= quiz.pregunta %>"/> <p>
 <label for="resp" class="rem">Respuesta:</label>

@@ -18,17 +18,14 @@ exports.load = function (req, res, next, quizId){
 //GET quizes
 exports.index = function (req,res) {
     var search = req.query.search;
-    var where;
-    var order = 'pregunta ASC';
     //si viene en el query search contruimos where like
     if (req.query.search) {
       search = '%'+search.trim().replace(/ /g , "%")+'%';
-      var where = ["pregunta like ?", search];
-      models.Quiz.findAll({where: ["pregunta like ?", search], order:'pregunta ASC'}).then( function (quizes) {
+      models.Quiz.findAll({where: ["pregunta like ?", search], order:'tema ASC, pregunta ASC'}).then( function (quizes) {
           res.render('quizes/index', {quizes:quizes,errors: []});
       }).catch(function(error) {next(error);});
     }else{
-      models.Quiz.findAll({order:'pregunta ASC'}).then( function (quizes) {
+      models.Quiz.findAll({order:'tema ASC, pregunta ASC'}).then( function (quizes) {
           res.render('quizes/index', {quizes:quizes,errors: []});
       }).catch(function(error) {next(error);});
     }
@@ -51,7 +48,7 @@ exports.answer = function (req,res) {
 //GET /quizes/new
 exports.new= function (req,res) {
     var quiz = models.Quiz.build(
-        {pregunta: 'Pregunta', respuesta:'Respuesta'}
+        {tema: 'tema', pregunta: 'Pregunta', respuesta:'Respuesta'}
     );
     res.render ('quizes/new', {quiz: quiz, errors: []});
 };
@@ -59,7 +56,6 @@ exports.new= function (req,res) {
 //POST /quizes/create
 exports.create = function(req, res) {
   var quiz = models.Quiz.build(req.body.quiz);
-  console.log ("tema "+req.body.quiz.tema);
   var errors = quiz.validate();
   if (errors) {
     var i=0; var errores=new Array();//se convierte en [] con la propiedad message por compatibilida con layout
@@ -68,7 +64,7 @@ exports.create = function(req, res) {
   } else {
     //guarda en DB los campos pregunta y respuesta de quiz
     quiz.save({
-      fields: ["pregunta", "respuesta"]
+      fields: ["tema", "pregunta", "respuesta"]
     }).then(function() {
       res.redirect('/quizes');
     });
@@ -94,6 +90,7 @@ exports.destroy = function (req, res ){
 exports.update = function (req, res) {
   req.quiz.pregunta = req.body.quiz.pregunta;
   req.quiz.respuesta = req.body.quiz.respuesta;
+  req.quiz.tema = req.body.quiz.tema;
 
   var errors = req.quiz.validate()
 
@@ -104,7 +101,7 @@ exports.update = function (req, res) {
   } else {
     //guarda en DB los campos pregunta y respuesta de quiz
     req.quiz.save({
-      fields: ["pregunta", "respuesta"]
+      fields: ["tema", "pregunta", "respuesta"]
     }).then(function() {
       res.redirect('/quizes');
     });
