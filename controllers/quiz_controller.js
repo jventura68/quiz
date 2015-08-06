@@ -10,6 +10,8 @@ exports.load = function (req, res, next, quizId){
     function(quiz){
       if (quiz) {
         req.quiz = quiz;
+        console.log ('autoload quiz '+quiz.pregunta);
+        console.log (' comentarios '+quiz.comments.length)
         next();
       }else {
         next (new Error ('No existe quizId='+quizId));
