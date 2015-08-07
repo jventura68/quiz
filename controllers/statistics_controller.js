@@ -18,7 +18,7 @@ exports.count = function (req, res, next) {
 		}).then (function (numComments){
 				statistics.numComments=numComments;
 				statistics.mediaComments = numComments / statistics.numPreguntas;
-				return models.Comment.count( { group : 'QuizId'});
+				return models.Comment.count( { group : "QuizId"});
 		}).then (function (numPreguntasConComments){
 				statistics.numPreguntasConComments=numPreguntasConComments;
 				statistics.numPreguntasSinComments=statistics.numPreguntas-
