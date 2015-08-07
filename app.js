@@ -49,7 +49,7 @@ app.use(function (req,res,next) {
 				var endDate = moment(new Date());
 				var secondsDiff = endDate.diff(startDate, 'seconds')
 				console.log('user ' +req.session.user.username+ ' sesion activa durante ' + secondsDiff+ ' segundos')
-				if (secondsDiff>20) {
+				if (secondsDiff>60) {
 					console.log ('user ' +req.session.user.username+ ' timeout de sesion')
 					delete req.session.user;
 				} else {
