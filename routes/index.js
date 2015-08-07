@@ -4,6 +4,7 @@ var quizController =require('../controllers/quiz_controller');
 var authorController = require ('../controllers/author_controller');
 var commentController = require ('../controllers/comment_controller');
 var sessionController = require ('../controllers/session_controller');
+var statisticsController = require ('../controllers/statistics_controller');
 /* GET home page. */
 router.get('/', function(req, res) {
   res.render('index', { title: 'Quiz' , errors: []});
@@ -34,5 +35,8 @@ router.get ('/quizes/:quizId(\\d+)/comments/:commentId(\\d+)/publish',
 
 // Definición de rutas de author
 router.get('/author',                       authorController.author);
+
+// Definición de rutas de estadísticas
+router.get('/quizes/statistics',            statisticsController.count, statisticsController.show);
 
 module.exports = router;
