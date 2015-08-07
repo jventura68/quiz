@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var partials = require ('express-partials');
 var methodOverride = require('method-override');
 var session = require('express-session');
+var moment = require('moment');
 
 var routes = require('./routes/index');
 
@@ -37,6 +38,29 @@ app.use(function (req,res,next){
 	}
 	//Hacer visible req.session en las vistas
 	res.locals.session = req.session;
+	next();
+});
+
+//auto-logout, si la session está inactiva más de 10 seg. la destruye
+app.use(function (req,res,next) {
+	if (req.session.user){
+			if (req.session.user.time){
+				var startDate = moment(req.session.user.time);
+				var endDate = moment(new Date());
+				var secondsDiff = endDate.diff(startDate, 'seconds')
+				console.log('user ' +req.session.user.username+ ' sesion activa durante ' + secondsDiff+ ' segundos')
+				if (secondsDiff>20) {
+					console.log ('user ' +req.session.user.username+ ' timeout de sesion')
+					delete req.session.user;
+				} else {
+					req.session.user.time = new Date();
+					console.log ('user '+ req.session.user.username+ " restaura sesion "+req.session.user.time)
+				}
+			} else {
+				req.session.user.time = new Date();
+				console.log ('user '+ req.session.user.username+ " inicia sesion "+req.session.user.time)
+			}
+	}
 	next();
 });
 

@@ -32,7 +32,11 @@ exports.create = function(req, res) {
 		// Si existe req.session.user hay session creada
 		req.session.user = {id:user.id, username:user.username};
 		console.log('req.session'+req.session);
-		res.redirect (req.session.redir.toString()); //redir path anterior a login
+		if (req.session.redir){
+			res.redirect (req.session.redir.toString()); //redir path anterior a login
+		}else{
+			res.redirect ('/');
+		}
 	});
 };
 
